@@ -172,31 +172,15 @@
            }
          });
       }
-      
-      $("#addButton").on("click", function()
-      {
 
-      });
+      
 
         
     }
 
      function displayEdit()
      {
-       let key = location.hash.substring(1);
-
-       console.log(key);
-
-       let contact = new core.Contact();
-
-       if(key != "")
-       {
-        console.deserialize(localStorage.getItem(key));
-
-        $("#fullName").val(contact.FullName);
-        $("#contactNumber").val(contact.ContactNumber);
-        $("#")
-       }
+       let key;
      }
 
     function Start()
@@ -220,9 +204,6 @@
           case "Contact":
               displayContact();
             break;
-          case "Contact-List":
-            displayContactList();
-          break;
           case "Contact-List":
             displayContactList();
           break;

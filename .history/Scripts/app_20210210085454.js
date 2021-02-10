@@ -134,70 +134,57 @@
     {
       if (localStorage.length > 0) 
       {
-        let contactList = document.getElementById("contactList");
+        // form validation
+        $("#fullName").on("blur", function()
+        {
+          if($(this).val().length < 2)
+          {
+            $(this).trigger("focus").trigger("select");
+            messageArea.show().addClass("alert alert-danger").text("Please enter an appropriate Name");
+          }
+          else
+          {
+              messageArea.removeAttr("class").hide();
+          }
+        });
 
-        let data = "";
-        let index = 0; // sentinel variable
-        // returns an array of keys from localStorage
-        let keys = Object.keys(localStorage);
-        for (const key of keys) {
-          let contactData = localStorage.getItem(key);
+        $("#sendButton").on("click", (event)=> 
+        {
+          if($("#subscribeCheckbox")[0].checked)
+          {
+            let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
 
-          let contact = new core.Contact();
-          contact.deserialize(contactData);
+            if(contact.serialize())
+            {
+              let key = contact.FullName.slice(0,1) + Date.now();
 
-          data += `<tr>
-          <th scope="row">${index}</th>
-          <td>${contact.FullName}</td>
-          <td>${contact.ContactNumber}</td>
-          <td>${contact.EmailAddress}</td>
-          <td class="text-center"><button value="${key}" class="btn btn-primary btn-sm edit"><i class="fas fa-edit fa-sm"></i> Edit</button></td>
-          <td class="text-center"><button value="${key}" class="btn btn-danger btn-sm delete"><i class="fas fa-trash-alt fa-sm"></i> Delete</button></td>
-          </tr>`;
-
-          index++;
+              localStorage.setItem(key, contact.serialize());
+            }
+          }
+        });
         }
+        
 
         contactList.innerHTML = data;
-        
+
+        //TODO - need to create an edit page
         $("button.edit").on("click", function(){
-          location.href ="edit.html#" + $(this).val();
+          console.log($(this).val());
          });
 
+         //TODO - need to fix this item - it breaks when we delete a middle item
          $("button.delete").on("click", function(){
-           if(confirm("Are you sure?"))
-           {
-            localStorage.removeItem($(this).val());
-            location.href = "contact-list.html"; // refresh the page
-           }
-         });
+          if(confirm("Are you sure?"))
+          {
+           localStorage.removeItem($(this).val());
+           location.href = "contact-list.html"; // refresh the page
+          }
+        });
+          
+        }
       }
-      
-      $("#addButton").on("click", function()
-      {
 
-      });
-
-        
-    }
-
-     function displayEdit()
-     {
-       let key = location.hash.substring(1);
-
-       console.log(key);
-
-       let contact = new core.Contact();
-
-       if(key != "")
-       {
-        console.deserialize(localStorage.getItem(key));
-
-        $("#fullName").val(contact.FullName);
-        $("#contactNumber").val(contact.ContactNumber);
-        $("#")
-       }
-     }
+     
 
     function Start()
     {
@@ -220,9 +207,6 @@
           case "Contact":
               displayContact();
             break;
-          case "Contact-List":
-            displayContactList();
-          break;
           case "Contact-List":
             displayContactList();
           break;

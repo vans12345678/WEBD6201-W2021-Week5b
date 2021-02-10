@@ -157,46 +157,12 @@
 
           index++;
         }
-
-        contactList.innerHTML = data;
-        
-        $("button.edit").on("click", function(){
-          location.href ="edit.html#" + $(this).val();
-         });
-
-         $("button.delete").on("click", function(){
-           if(confirm("Are you sure?"))
-           {
-            localStorage.removeItem($(this).val());
-            location.href = "contact-list.html"; // refresh the page
-           }
-         });
       }
-      
-      $("#addButton").on("click", function()
-      {
-
-      });
-
-        
     }
 
      function displayEdit()
      {
-       let key = location.hash.substring(1);
-
-       console.log(key);
-
-       let contact = new core.Contact();
-
-       if(key != "")
-       {
-        console.deserialize(localStorage.getItem(key));
-
-        $("#fullName").val(contact.FullName);
-        $("#contactNumber").val(contact.ContactNumber);
-        $("#")
-       }
+       let key;
      }
 
     function Start()
@@ -220,9 +186,6 @@
           case "Contact":
               displayContact();
             break;
-          case "Contact-List":
-            displayContactList();
-          break;
           case "Contact-List":
             displayContactList();
           break;
