@@ -1,0 +1,2 @@
+//Namespace core
+let core;
