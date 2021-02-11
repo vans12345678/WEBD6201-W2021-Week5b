@@ -67,7 +67,7 @@
         // update / modification
         //mainContent.firstElementChild.textContent = "Welcome Home!";
 
-        mainContent.innerHTML = `<h1 id="firstHeading">Welcome to WEBD6201 - Week5</h1>
+        mainContent.innerHTML = `<h1 id="firstHeading">Welcome to WEBD6201 - Lab 1</h1>
          <p id="paragraphOne" class="fs-3 fw-bold">This is my first Paragraph</p>
         `;
         
@@ -175,7 +175,7 @@
       
       $("#addButton").on("click", function()
       {
-        location.href = "edit.html";
+
       });
 
         
@@ -195,7 +195,10 @@
 
         $("#fullName").val(contact.FullName);
         $("#contactNumber").val(contact.ContactNumber);
+
+
         $("#emailAddress").val(contact.EmailAddress);
+      
 
         $("#editButton").on("click", function() {
 
@@ -211,8 +214,8 @@
       $("#cancelButton").on("click", function(){
         location.href = "contact-list.html";
       });
-
-       
+      
+       }
      }
 
     function Start()
@@ -239,8 +242,8 @@
           case "Contact-List":
             displayContactList();
           break;
-          case "Edit":
-            displayEdit();
+          case "Contact-List":
+            displayContactList();
           break;
         }
         

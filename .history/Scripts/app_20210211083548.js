@@ -239,8 +239,8 @@
           case "Contact-List":
             displayContactList();
           break;
-          case "Edit":
-            displayEdit();
+          case "Contact-List":
+            displayContactList();
           break;
         }
         
