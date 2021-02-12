@@ -6,10 +6,23 @@
 
 "use strict";
 
+
 ((core) =>
 {
     function displayHome()
     {
+      $("button").on("mouseover", () =>{
+        console.log("mouse over - jquery");
+      });
+      let myButton = document.querySelectorAll("button")[0];     
+      myButton.addEventListener("click", () =>
+      {
+        console.log("clicked button - js");
+      })
+
+      //console.log(myButton);
+
+
         let paragraphOneText =
           "This is a simple site to demonstrate DOM Manipulation for ICE 1";
 
@@ -54,7 +67,7 @@
         // update / modification
         //mainContent.firstElementChild.textContent = "Welcome Home!";
 
-        mainContent.innerHTML = `<h1 id="firstHeading">Welcome to WEBD6201 - Lab 1</h1>
+        mainContent.innerHTML = `<h1 id="firstHeading">Welcome to WEBD6201 - Week5</h1>
          <p id="paragraphOne" class="fs-3 fw-bold">This is my first Paragraph</p>
         `;
         
@@ -75,89 +88,45 @@
 
     }
 
-    function testFullName()
-    {
-      let messageArea = $("#messageArea").hide();
-      let fullNamePattern = /([A-Z][a-z]{1,25})+(\s|,|-)([A-Z][a-z]{1,25})+(\s|,|-)*/;
-
-        
-        $("#fullName").on("blur", function()
-        {
-          if(!fullNamePattern.test($(this).val()))
-          {
-            $(this).trigger("focus").trigger("select");
-            messageArea.show().addClass("alert alert-danger").text("Please enter a valid Full Name. This must include at least a Capitalized first name followed by a Capitlalized last name.");
-          }
-          else
-          {
-              messageArea.removeAttr("class").hide();
-          }
-        });
-    }
-
-    function testContactNumber()
-    {
-      let messageArea = $("#messageArea");
-      let contactNumberPattern = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
-        
-        $("#contactNumber").on("blur", function()
-        {
-          if(!contactNumberPattern.test($(this).val()))
-          {
-            $(this).trigger("focus").trigger("select");
-            messageArea.show().addClass("alert alert-danger").text("Please enter a valid Contact Number. Country code and area code are both optional");
-          }
-          else
-          {
-              messageArea.removeAttr("class").hide();
-          }
-        });
-    }
-
-    function testEmailAddress()
-    {
-      let messageArea = $("#messageArea");
-      let emailAddressPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
-        
-        $("#emailAddress").on("blur", function()
-        {
-          if(!emailAddressPattern.test($(this).val()))
-          {
-            $(this).trigger("focus").trigger("select");
-            messageArea.show().addClass("alert alert-danger").text("Please enter a valid Email Address.");
-          }
-          else
-          {
-              messageArea.removeAttr("class").hide();
-          }
-        });
-    }
-
-    function formValidation()
-    {
-      testFullName();
-      testContactNumber();
-      testEmailAddress();
-    }
-
     function displayContact()
     {
-      // form validation
-      formValidation();
 
-        $("#sendButton").on("click", (event)=> 
+      let messageArea = $("#messageArea").hide();
+        $("#messageArea").hide();
+
+        // form validation
+        $("#fullName").on("blur", function()
         {
-          if($("#subscribeCheckbox")[0].checked)
+            if($(this).val().length < 2)
+            {
+              $(this).trigger("focus").trigger("select");
+
+              messageArea.show(500).addClass("alert alert-danger").text("Please enter an appropriate Name");
+            }
+            else
+            {
+              messageArea.removeAttr("class").hide();
+            }
+        });
+
+        $("#subscribeCheckBox").on("change", function(){
+            console.log("checkbox checked!")
+          });
+
+        let sendButton = document.getElementById("sendButton");
+        $("#sendButton").on("click", (event)=>{
+          
+          if( $("#subscribeCheckBox")[0].checked)
           {
             let contact = new core.Contact(fullName.value, contactNumber.value, emailAddress.value);
 
             if(contact.serialize())
             {
-              let key = contact.FullName.substring(0, 1) + Date.now();
-
-              localStorage.setItem(key, contact.serialize());
+              localStorage.setItem((localStorage.length + 1).toString(), contact.serialize());
             }
           }
+          // document.getElementById("subscribeCheckBox").addEventListener();
+           
         });
     }
 
@@ -168,20 +137,17 @@
         let contactList = document.getElementById("contactList");
 
         let data = "";
-
+        let index = 0; // sentinel variable
+        // returns an array of keys from localStorage
         let keys = Object.keys(localStorage);
-         
-        let index = 1;
-
-        for (const key of keys) 
-        {
+        for (const key of keys) {
           let contactData = localStorage.getItem(key);
 
           let contact = new core.Contact();
           contact.deserialize(contactData);
 
           data += `<tr>
-          <th scope="row" class="text-center">${index}</th>
+          <th scope="row">${index}</th>
           <td>${contact.FullName}</td>
           <td>${contact.ContactNumber}</td>
           <td>${contact.EmailAddress}</td>
@@ -193,105 +159,64 @@
         }
 
         contactList.innerHTML = data;
-
+        
         $("button.edit").on("click", function(){
-          location.href = "edit.html#" + $(this).val();
+          location.href ="edit.html#" + $(this).val();
          });
 
          $("button.delete").on("click", function(){
            if(confirm("Are you sure?"))
            {
             localStorage.removeItem($(this).val());
+            location.href = "contact-list.html"; // refresh the page
            }
-           location.href = "contact-list.html"; // refresh the page
-         });
-
-         $("#addButton").on("click", function() 
-         {
-          location.href = "edit.html";
          });
       }
+      
+      $("#addButton").on("click", function()
+      {
+        location.href = "edit.html";
+      });
+
+        
     }
 
-    function displayEdit()
-    {
-      let key = location.hash.substring(1);
+     function displayEdit()
+     {
+       let key = location.hash.substring(1);
 
-      let contact = new core.Contact();
+       console.log(key);
 
-      // check to ensure that the key is not empty
-      //If edit is clicked
-      if(key != "")
-      {
-        // get contact info from localStorage
-        contact.deserialize(localStorage.getItem(key));
+       let contact = new core.Contact();
 
-        // display contact information in the form
+       if(key != "")
+       {
+        console.deserialize(localStorage.getItem(key));
+
         $("#fullName").val(contact.FullName);
         $("#contactNumber").val(contact.ContactNumber);
         $("#emailAddress").val(contact.EmailAddress);
-      } 
-      //If add new contact is clicked
+
+        $("#editButton").on("click", function() {
+        });
+      }
       else
       {
-        // modify the page so that it shows "Add Contact" in the header 
         $("main>h1").text("Add Contact");
-        // modify edit button so that it shows "Add" as well as the appropriate icon
-        $("#editButton").html(`<i class="fas fa-plus-circle fa-lg"></i> Add`);
+        $("editButton").html(`<i class="fas fa-plus-circle fa-lg"></i> Add`);
+        
       }
 
-      // form validation
-      formValidation();
-      
-     $("#editButton").on("click", function() 
-        {
-            // check to see if key is empty
-          if(key == "")
-          {
-            // create a new key
-            key = contact.FullName.substring(0, 1) + Date.now();
-          }
-
-          // copy contact info from form to contact object
-          contact.FullName = $("#fullName").val();
-          contact.ContactNumber = $("#contactNumber").val();
-          contact.EmailAddress = $("#emailAddress").val();
-
-          // add the contact info to localStorage
-          localStorage.setItem(key, contact.serialize());
-
-          // return to the contact list
-          location.href = "contact-list.html";
-          
-        });
-   
-
-      $("#cancelButton").on("click", function()
-      {
-        // return to the contact list
+      $("#cancelButton").on("click", function(){
         location.href = "contact-list.html";
       });
-    }
 
-    function displayLogin()
-    {
-
-    }
-
-    function displayRegister()
-    {
-
-    }
+       
+     }
 
     function Start()
     {
         console.log("App Started...");
-
-        let keys = Object.keys(localStorage);
-
-        //Optional
-        console.log(keys);
-        console.log(location);
 
         switch (document.title) 
         {
@@ -312,15 +237,9 @@
             break;
           case "Contact-List":
             displayContactList();
-            break;
+          break;
           case "Edit":
             displayEdit();
-            break;
-          case "Login":
-            displayLogin();
-          break;
-          case "Register":
-            displayRegister();
           break;
         }
         
@@ -330,4 +249,4 @@
 
     core.Start = Start;
 
-})(core || (core={}));
+}) (core || (core={}));

@@ -261,7 +261,7 @@
           localStorage.setItem(key, contact.serialize());
 
           // return to the contact list
-          location.href = "contact-list.html";
+          //location.href = "contact-list.html";
           
         });
    

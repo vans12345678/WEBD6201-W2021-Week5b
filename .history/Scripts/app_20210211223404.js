@@ -220,7 +220,6 @@
       let contact = new core.Contact();
 
       // check to ensure that the key is not empty
-      //If edit is clicked
       if(key != "")
       {
         // get contact info from localStorage
@@ -230,8 +229,7 @@
         $("#fullName").val(contact.FullName);
         $("#contactNumber").val(contact.ContactNumber);
         $("#emailAddress").val(contact.EmailAddress);
-      } 
-      //If add new contact is clicked
+      }
       else
       {
         // modify the page so that it shows "Add Contact" in the header 
@@ -288,7 +286,7 @@
         console.log("App Started...");
 
         let keys = Object.keys(localStorage);
-
+        
         //Optional
         console.log(keys);
         console.log(location);
